@@ -1,22 +1,20 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.8-slim
 
-# Use an official Python runtime as the base image
-FROM python:3.8
-
-# Set the working directory inside the container
+# Set the working directory in the container
 WORKDIR /app
 
-# Copy your Python script and requirements file into the container
-COPY app.py .
-COPY requirements.txt .
+# Copy the current directory contents into the container at /app
+COPY . /app
 
-# Install any necessary dependencies
-RUN pip install -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run your Python script
+# Make port 5000 available to the world outside this container
+EXPOSE 5000
+
+# Define environment variable
+ENV NAME World
+
+# Run app.py when the container launches
 CMD ["python", "app.py"]
-
-# Expose any necessary ports (if applicable)
-EXPOSE 8080
-
-# Define a volume for the output directory
-VOLUME /output
