@@ -21,21 +21,25 @@ def txt_to_pdf(txt_file, pdf_file):
     c.save()
 
 def convert_hwp_to_pdf(hwp_file, output_dir):
-    # Open the HWP file
-    f = olefile.OleFileIO(hwp_file)
+    try:
+        # Open the HWP file
+        f = olefile.OleFileIO(hwp_file)
 
-    # Extract the content from the 'PrvText' stream (encoded in UTF-16)
-    encoded_text = f.openstream('PrvText').read()
-    txt_content = encoded_text.decode('utf-16')
+        # Extract the content from the 'PrvText' stream (encoded in UTF-16)
+        encoded_text = f.openstream('PrvText').read()
+        txt_content = encoded_text.decode('utf-16')
 
-    txt_file = os.path.join(output_dir, 'output.txt')
-    pdf_file = os.path.join(output_dir, 'output.pdf')
+        txt_file = os.path.join(output_dir, 'output.txt')
+        pdf_file = os.path.join(output_dir, 'output.pdf')
 
-    with open(txt_file, 'w', encoding='utf-8') as txt_output:
-        txt_output.write(txt_content)
+        with open(txt_file, 'w', encoding='utf-8') as txt_output:
+            txt_output.write(txt_content)
 
-    txt_to_pdf(txt_file, pdf_file)
-    print(f"Converted {hwp_file} to {pdf_file}")
+        txt_to_pdf(txt_file, pdf_file)
+        print(f"Converted {hwp_file} to {pdf_file}")
+    except Exception as e:
+        print(f"Failed to convert HWP to PDF: {e}")
+        raise
 
 @app.route('/')
 def index():
@@ -51,7 +55,9 @@ def upload_file():
             uploaded_file.save(temp_path)
 
             # Call your HWP to PDF conversion function
-            output_dir = '/path/to/output/directory'
+            output_dir = os.environ.get('OUTPUT_DIR', '/tmp/output')
+            os.makedirs(output_dir, exist_ok=True)
+
             convert_hwp_to_pdf(temp_path, output_dir)
 
             # Clean up the temporary file
@@ -64,4 +70,4 @@ def upload_file():
         return f"Error during file upload: {str(e)}"
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)), debug=False)
