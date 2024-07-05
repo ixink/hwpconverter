@@ -6,7 +6,7 @@ FROM python:3.8
 WORKDIR /app
 
 # Copy your Python script and requirements file into the container
-COPY main.py .
+COPY app.py .
 COPY requirements.txt .
 
 # Install any necessary dependencies
