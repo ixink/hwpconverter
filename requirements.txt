@@ -1,2 +1,8 @@
+Flask==2.2.5
+Flask-RESTful==0.3.10
+waitress==2.1.2
+Werkzeug==2.3.7
+python-docx==0.8.11
+mammoth==1.6.0
 reportlab==4.2.2
 olefile==0.46
