@@ -1,22 +1,20 @@
-
-# Use an official Python runtime as the base image
-FROM python:3.8
+# Use the official Python image as the base image
+FROM python:3.9
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy your Python script and requirements file into the container
-COPY main.py .
+# Copy the requirements file into the container
 COPY requirements.txt .
 
-# Install any necessary dependencies
-RUN pip install -r requirements.txt
+# Install any dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Run your Python script
-CMD ["python", "main.py"]
+# Copy the rest of your application code into the container
+COPY . .
 
-# Expose any necessary ports (if applicable)
-EXPOSE 8080
+# Expose the port your Flask app will run on
+EXPOSE 5000
 
-# Define a volume for the output directory
-VOLUME /output
+# Define the command to run your Flask app
+CMD ["python", "app.py"]
