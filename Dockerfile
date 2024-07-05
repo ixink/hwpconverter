@@ -13,7 +13,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # Run your Python script
-CMD ["python", "main.py"]
+CMD ["python", "app.py"]
 
 # Expose any necessary ports (if applicable)
 EXPOSE 8080
